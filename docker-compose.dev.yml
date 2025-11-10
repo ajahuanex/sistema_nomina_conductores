@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: drtc_nomina_dev
+      POSTGRES_USER: drtc_dev
+      POSTGRES_PASSWORD: dev_password
+
+  redis:
+    ports:
+      - "6381:6379"
+
+  backend:
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql+asyncpg://drtc_dev:dev_password@postgres:5432/drtc_nomina_dev
+    volumes:
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --log-level debug
+
+  frontend:
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev -- --host 0.0.0.0
+
+  # PgAdmin para gestión de base de datos
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: drtc-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@drtc.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5051:80"
+    networks:
+      - drtc-network
+    depends_on:
+      - postgres
+
+  # Redis Commander para gestión de Redis
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: drtc-redis-commander
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    ports:
+      - "8083:8081"
+    networks:
+      - drtc-network
+    depends_on:
+      - redis

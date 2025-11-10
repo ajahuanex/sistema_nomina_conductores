@@ -1,0 +1,30 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Sistema de Nómina de Conductores - DRTC Puno">
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div class="text-center">
+      <h1 class="text-5xl font-bold text-gray-900 mb-4">
+        Sistema de Nómina de Conductores
+      </h1>
+      <p class="text-xl text-gray-600 mb-8">
+        Dirección Regional de Transportes y Comunicaciones - Puno
+      </p>
+      <div class="space-x-4">
+        <a 
+          href="/login" 
+          class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+        >
+          Iniciar Sesión
+        </a>
+        <a 
+          href="/docs" 
+          class="inline-block bg-gray-200 text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+        >
+          Documentación
+        </a>
+      </div>
+    </div>
+  </div>
+</MainLayout>

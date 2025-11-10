@@ -1,0 +1,161 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: drtc-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-drtc_nomina}
+      POSTGRES_USER: ${POSTGRES_USER:-drtc_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-drtc_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-drtc_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - drtc-network
+    restart: unless-stopped
+
+  # Redis para caché y colas
+  redis:
+    image: redis:7-alpine
+    container_name: drtc-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6381:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - drtc-network
+    restart: unless-stopped
+
+  # Backend FastAPI
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: drtc-backend
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-drtc_user}:${POSTGRES_PASSWORD:-drtc_password}@postgres:5432/${POSTGRES_DB:-drtc_nomina}
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - ./backend:/app
+      - backend_uploads:/app/uploads
+    ports:
+      - "8002:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - drtc-network
+    restart: unless-stopped
+
+  # Celery Worker para tareas asíncronas
+  celery-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: drtc-celery-worker
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-drtc_user}:${POSTGRES_PASSWORD:-drtc_password}@postgres:5432/${POSTGRES_DB:-drtc_nomina}
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - postgres
+      - redis
+      - backend
+    command: celery -A app.tasks.celery_app worker --loglevel=info
+    networks:
+      - drtc-network
+    restart: unless-stopped
+
+  # Celery Beat para tareas programadas
+  celery-beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: drtc-celery-beat
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-drtc_user}:${POSTGRES_PASSWORD:-drtc_password}@postgres:5432/${POSTGRES_DB:-drtc_nomina}
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - postgres
+      - redis
+      - backend
+    command: celery -A app.tasks.celery_app beat --loglevel=info
+    networks:
+      - drtc-network
+    restart: unless-stopped
+
+  # Frontend Astro
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: drtc-frontend
+    environment:
+      PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost/api}
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "4321:4321"
+    depends_on:
+      - backend
+    command: npm run dev -- --host
+    networks:
+      - drtc-network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: drtc-nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    ports:
+      - "8082:80"
+      - "8443:443"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - drtc-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  backend_uploads:
+    driver: local
+
+networks:
+  drtc-network:
+    driver: bridge

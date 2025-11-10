@@ -1,0 +1,16 @@
+Generic single-database configuration with async support.
+
+Para crear una nueva migración:
+alembic revision --autogenerate -m "descripción del cambio"
+
+Para aplicar migraciones:
+alembic upgrade head
+
+Para revertir una migración:
+alembic downgrade -1
+
+Para ver historial:
+alembic history
+
+Para ver estado actual:
+alembic current
