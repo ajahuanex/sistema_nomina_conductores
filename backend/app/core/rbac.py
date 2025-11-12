@@ -42,8 +42,10 @@ def require_roles(*allowed_roles: RolUsuario):
         @wraps(func)
         async def wrapper(*args, current_user: Usuario = Depends(get_current_user), **kwargs):
             if current_user.rol not in allowed_roles:
+                # Convert roles to string values for error message
+                roles_str = ', '.join([r.value if hasattr(r, 'value') else str(r) for r in allowed_roles])
                 raise PermissionDenied(
-                    detail=f"Acceso denegado. Roles permitidos: {', '.join([r.value for r in allowed_roles])}"
+                    detail=f"Acceso denegado. Roles permitidos: {roles_str}"
                 )
             return await func(*args, current_user=current_user, **kwargs)
         return wrapper

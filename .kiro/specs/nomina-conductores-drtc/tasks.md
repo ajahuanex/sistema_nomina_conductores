@@ -187,14 +187,22 @@
     - Escribir tests unitarios para cada repositorio
     - _Requirements: 12.4_
 
-- [ ] 5. Implementar módulo de gestión de usuarios
-  - [ ] 5.1 Crear schemas Pydantic para Usuario
+- [x] 5. Implementar módulo de gestión de usuarios
+
+
+
+
+  - [x] 5.1 Crear schemas Pydantic para Usuario
+
+
     - Crear UsuarioBase, UsuarioCreate, UsuarioUpdate, UsuarioResponse
     - Implementar validaciones de email, contraseña fuerte
     - Crear schema para cambio de contraseña
     - _Requirements: 1.2_
 
-  - [ ] 5.2 Implementar servicio UsuarioService
+  - [x] 5.2 Implementar servicio UsuarioService
+
+
     - Crear método crear_usuario con hashing de contraseña
     - Crear método actualizar_usuario
     - Crear método cambiar_contraseña
@@ -202,7 +210,9 @@
     - Escribir tests unitarios para UsuarioService
     - _Requirements: 1.2, 1.3, 1.4, 1.5, 1.6_
 
-  - [ ] 5.3 Crear endpoints CRUD de usuarios
+
+  - [x] 5.3 Crear endpoints CRUD de usuarios
+
     - Implementar GET /api/v1/usuarios (solo SUPERUSUARIO, DIRECTOR)
     - Implementar POST /api/v1/usuarios (solo SUPERUSUARIO)
     - Implementar GET /api/v1/usuarios/{id}
@@ -211,14 +221,25 @@
     - Escribir tests de integración para endpoints de usuarios
     - _Requirements: 1.2, 1.3, 1.4, 1.5, 1.6_
 
-- [ ] 6. Implementar módulo de gestión de empresas
-  - [ ] 6.1 Crear schemas Pydantic para Empresa
+- [x] 6. Implementar módulo de gestión de empresas
+
+
+
+
+
+
+
+  - [x] 6.1 Crear schemas Pydantic para Empresa
+
+
     - Crear EmpresaBase, EmpresaCreate, EmpresaUpdate, EmpresaResponse
     - Implementar validación de RUC (11 dígitos)
     - Crear schema para AutorizacionEmpresa
     - _Requirements: 2.1, 2.2_
 
-  - [ ] 6.2 Implementar servicio EmpresaService
+  - [x] 6.2 Implementar servicio EmpresaService
+
+
     - Crear método registrar_empresa con validación de RUC único
     - Crear método agregar_autorizacion con validación de tipo
     - Crear método obtener_empresas con filtros
@@ -226,7 +247,9 @@
     - Escribir tests unitarios para EmpresaService
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7_
 
-  - [ ] 6.3 Crear endpoints CRUD de empresas
+  - [x] 6.3 Crear endpoints CRUD de empresas
+
+
     - Implementar GET /api/v1/empresas con paginación y filtros
     - Implementar POST /api/v1/empresas
     - Implementar GET /api/v1/empresas/{id}
@@ -237,15 +260,22 @@
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7_
 
 
-- [ ] 7. Implementar módulo de gestión de conductores
-  - [ ] 7.1 Crear schemas Pydantic para Conductor
+- [-] 7. Implementar módulo de gestión de conductores
+
+
+
+
+  - [x] 7.1 Crear schemas Pydantic para Conductor
+
     - Crear ConductorBase, ConductorCreate, ConductorUpdate, ConductorResponse
     - Implementar validaciones de DNI, licencia, fechas
     - Crear validator para verificar que licencia no esté vencida
     - Crear validator para categoría de licencia según tipo de autorización
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
 
-  - [ ] 7.2 Implementar servicio ConductorService
+
+  - [x] 7.2 Implementar servicio ConductorService
+
     - Crear método registrar_conductor con validaciones completas
     - Crear método validar_categoria_licencia según tipo de autorización de empresa
     - Crear método actualizar_conductor
@@ -254,7 +284,14 @@
     - Escribir tests unitarios para ConductorService incluyendo validaciones
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9_
 
-  - [ ] 7.3 Crear endpoints CRUD de conductores
+
+  - [x] 7.3 Crear endpoints CRUD de conductores
+
+
+
+
+
+
     - Implementar GET /api/v1/conductores con paginación, filtros y búsqueda
     - Implementar POST /api/v1/conductores (solo Gerente de su empresa)
     - Implementar GET /api/v1/conductores/{id}
