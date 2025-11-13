@@ -49,7 +49,7 @@ services:
     environment:
       REDIS_HOSTS: local:redis:6379
     ports:
-      - "8083:8081"
+      - "9091:8081"
     networks:
       - drtc-network
     depends_on:
