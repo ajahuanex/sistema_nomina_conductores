@@ -1,8 +1,9 @@
 """
 Schemas para autenticación
 """
-from pydantic import BaseModel, EmailStr, Field
+from __future__ import annotations
 from typing import Optional
+from pydantic import BaseModel, EmailStr, Field
 from app.models.user import RolUsuario
 
 
@@ -17,40 +18,6 @@ class LoginRequest(BaseModel):
                 {
                     "email": "usuario@example.com",
                     "password": "password123"
-                }
-            ]
-        }
-    }
-
-
-class TokenResponse(BaseModel):
-    """Schema para respuesta de tokens"""
-    access_token: str = Field(..., description="Token de acceso JWT")
-    refresh_token: str = Field(..., description="Token de refresco JWT")
-    token_type: str = Field(default="bearer", description="Tipo de token")
-    
-    model_config = {
-        "json_schema_extra": {
-            "examples": [
-                {
-                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-                    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-                    "token_type": "bearer"
-                }
-            ]
-        }
-    }
-
-
-class RefreshTokenRequest(BaseModel):
-    """Schema para solicitud de refresh token"""
-    refresh_token: str = Field(..., description="Token de refresco")
-    
-    model_config = {
-        "json_schema_extra": {
-            "examples": [
-                {
-                    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                 }
             ]
         }
@@ -79,6 +46,49 @@ class UserResponse(BaseModel):
                     "rol": "DIRECTOR",
                     "empresa_id": None,
                     "activo": True
+                }
+            ]
+        }
+    }
+
+
+class TokenResponse(BaseModel):
+    """Schema para respuesta de tokens"""
+    access_token: str = Field(..., description="Token de acceso JWT")
+    refresh_token: str = Field(..., description="Token de refresco JWT")
+    token_type: str = Field(default="bearer", description="Tipo de token")
+    user: Optional[UserResponse] = Field(None, description="Datos del usuario")
+    
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                    "token_type": "bearer",
+                    "user": {
+                        "id": "123e4567-e89b-12d3-a456-426614174000",
+                        "email": "usuario@example.com",
+                        "nombres": "Juan",
+                        "apellidos": "Pérez",
+                        "rol": "DIRECTOR",
+                        "activo": True
+                    }
+                }
+            ]
+        }
+    }
+
+
+class RefreshTokenRequest(BaseModel):
+    """Schema para solicitud de refresh token"""
+    refresh_token: str = Field(..., description="Token de refresco")
+    
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                 }
             ]
         }

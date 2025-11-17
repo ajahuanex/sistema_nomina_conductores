@@ -38,6 +38,38 @@ from app.schemas.conductor import (
     ConductorValidacionCategoria,
     ConductorValidacionCategoriaResponse
 )
+from app.schemas.documento import (
+    DocumentoBase,
+    DocumentoCreate,
+    DocumentoConductorResponse,
+    DocumentoConductorListResponse,
+    DocumentoUploadResponse
+)
+from app.schemas.habilitacion import (
+    ConceptoTUPABase,
+    ConceptoTUPACreate,
+    ConceptoTUPAUpdate,
+    ConceptoTUPAResponse,
+    HabilitacionBase,
+    HabilitacionCreate,
+    HabilitacionUpdate,
+    HabilitacionReview,
+    HabilitacionObservacion,
+    HabilitacionAprobacion,
+    HabilitacionHabilitar,
+    HabilitacionSuspension,
+    HabilitacionRevocacion,
+    HabilitacionResponse,
+    HabilitacionDetalle,
+    PagoBase,
+    PagoCreate,
+    PagoUpdate,
+    PagoConfirmacion,
+    PagoRechazo,
+    PagoResponse,
+    PagoDetalle,
+    OrdenPagoResponse
+)
 
 __all__ = [
     # Auth schemas
@@ -73,4 +105,34 @@ __all__ = [
     "ConductorBusqueda",
     "ConductorValidacionCategoria",
     "ConductorValidacionCategoriaResponse",
+    # Documento schemas
+    "DocumentoBase",
+    "DocumentoCreate",
+    "DocumentoConductorResponse",
+    "DocumentoConductorListResponse",
+    "DocumentoUploadResponse",
+    # Habilitacion schemas
+    "ConceptoTUPABase",
+    "ConceptoTUPACreate",
+    "ConceptoTUPAUpdate",
+    "ConceptoTUPAResponse",
+    "HabilitacionBase",
+    "HabilitacionCreate",
+    "HabilitacionUpdate",
+    "HabilitacionReview",
+    "HabilitacionObservacion",
+    "HabilitacionAprobacion",
+    "HabilitacionHabilitar",
+    "HabilitacionSuspension",
+    "HabilitacionRevocacion",
+    "HabilitacionResponse",
+    "HabilitacionDetalle",
+    "PagoBase",
+    "PagoCreate",
+    "PagoUpdate",
+    "PagoConfirmacion",
+    "PagoRechazo",
+    "PagoResponse",
+    "PagoDetalle",
+    "OrdenPagoResponse",
 ]

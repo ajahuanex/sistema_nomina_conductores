@@ -1,0 +1,221 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Dashboard - DRTC Puno">
+  <div class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p class="text-sm text-gray-600">Sistema de Nómina de Conductores - DRTC Puno</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <div id="userInfo" class="text-right">
+            <p class="text-sm font-medium text-gray-900"></p>
+            <p class="text-xs text-gray-600"></p>
+          </div>
+          <button
+            id="logoutButton"
+            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Welcome Card -->
+      <div class="bg-white rounded-lg shadow p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">Bienvenido al Sistema</h2>
+        <p class="text-gray-600">
+          Has iniciado sesión correctamente. Desde aquí podrás gestionar las habilitaciones de conductores.
+        </p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Habilitaciones Pendientes</p>
+              <p id="pendientesCount" class="text-3xl font-bold text-blue-600">-</p>
+            </div>
+            <div class="bg-blue-100 p-3 rounded-full">
+              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Total Habilitaciones</p>
+              <p id="totalCount" class="text-3xl font-bold text-green-600">-</p>
+            </div>
+            <div class="bg-green-100 p-3 rounded-full">
+              <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">API Documentación</p>
+              <a href="http://localhost:8002/api/docs" target="_blank" class="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                Ver Swagger UI →
+              </a>
+            </div>
+            <div class="bg-purple-100 p-3 rounded-full">
+              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="bg-white rounded-lg shadow p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Acciones Rápidas</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <a href="/conductores" class="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <div>
+              <p class="font-medium text-gray-900">Conductores</p>
+              <p class="text-xs text-gray-600">Gestionar conductores</p>
+            </div>
+          </a>
+
+          <a href="/conductores/nuevo" class="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <div>
+              <p class="font-medium text-gray-900">Nuevo Conductor</p>
+              <p class="text-xs text-gray-600">Registrar conductor</p>
+            </div>
+          </a>
+
+          <button class="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:border-yellow-500 hover:bg-yellow-50 transition-colors text-left">
+            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <div>
+              <p class="font-medium text-gray-900">Ver Pendientes</p>
+              <p class="text-xs text-gray-600">Próximamente</p>
+            </div>
+          </button>
+
+          <a href="http://localhost:8002/api/docs" target="_blank" class="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <div>
+              <p class="font-medium text-gray-900">API Docs</p>
+              <p class="text-xs text-gray-600">Swagger UI</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Info Card -->
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <div class="flex items-start gap-3">
+          <svg class="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div>
+            <h4 class="font-semibold text-blue-900 mb-2">Endpoints de Habilitaciones Implementados</h4>
+            <p class="text-sm text-blue-800 mb-3">
+              Los siguientes endpoints están disponibles y funcionando correctamente:
+            </p>
+            <ul class="text-sm text-blue-800 space-y-1 list-disc list-inside">
+              <li>GET /api/v1/habilitaciones - Listar habilitaciones</li>
+              <li>GET /api/v1/habilitaciones/pendientes - Listar pendientes</li>
+              <li>GET /api/v1/habilitaciones/&#123;id&#125; - Obtener habilitación</li>
+              <li>POST /api/v1/habilitaciones/&#123;id&#125;/revisar - Revisar solicitud</li>
+              <li>POST /api/v1/habilitaciones/&#123;id&#125;/aprobar - Aprobar solicitud</li>
+              <li>POST /api/v1/habilitaciones/&#123;id&#125;/observar - Observar solicitud</li>
+              <li>POST /api/v1/habilitaciones/&#123;id&#125;/habilitar - Habilitar conductor</li>
+              <li>POST /api/v1/habilitaciones/&#123;id&#125;/suspender - Suspender habilitación</li>
+            </ul>
+            <p class="text-sm text-blue-800 mt-3">
+              <strong>Pruébalos en:</strong> <a href="http://localhost:8002/api/docs" target="_blank" class="underline hover:text-blue-900">http://localhost:8002/api/docs</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</MainLayout>
+
+<script>
+  // Verificar autenticación
+  const token = localStorage.getItem('access_token');
+  const userStr = localStorage.getItem('user');
+
+  if (!token || !userStr) {
+    window.location.href = '/login';
+  }
+
+  // Mostrar información del usuario
+  try {
+    const user = JSON.parse(userStr);
+    const userInfoDiv = document.getElementById('userInfo');
+    if (userInfoDiv) {
+      userInfoDiv.querySelector('p:first-child')!.textContent = `${user.nombres} ${user.apellidos}`;
+      userInfoDiv.querySelector('p:last-child')!.textContent = user.rol;
+    }
+  } catch (error) {
+    console.error('Error parsing user data:', error);
+  }
+
+  // Cargar estadísticas
+  async function loadStats() {
+    try {
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+
+      // Obtener total de habilitaciones
+      const totalResponse = await fetch('http://localhost:8002/api/v1/habilitaciones', { headers });
+      if (totalResponse.ok) {
+        const total = await totalResponse.json();
+        document.getElementById('totalCount')!.textContent = total.length.toString();
+      }
+
+      // Obtener habilitaciones pendientes
+      const pendientesResponse = await fetch('http://localhost:8002/api/v1/habilitaciones/pendientes', { headers });
+      if (pendientesResponse.ok) {
+        const pendientes = await pendientesResponse.json();
+        document.getElementById('pendientesCount')!.textContent = pendientes.length.toString();
+      }
+    } catch (error) {
+      console.error('Error loading stats:', error);
+      document.getElementById('totalCount')!.textContent = '0';
+      document.getElementById('pendientesCount')!.textContent = '0';
+    }
+  }
+
+  // Logout
+  document.getElementById('logoutButton')?.addEventListener('click', () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user');
+    window.location.href = '/login';
+  });
+
+  // Cargar estadísticas al iniciar
+  loadStats();
+</script>

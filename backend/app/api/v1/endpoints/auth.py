@@ -77,10 +77,22 @@ async def login(
     access_token = create_access_token(token_data)
     refresh_token = create_refresh_token({"sub": str(user.id), "email": user.email})
     
+    # Preparar datos del usuario para la respuesta
+    user_response = UserResponse(
+        id=str(user.id),
+        email=user.email,
+        nombres=user.nombres,
+        apellidos=user.apellidos,
+        rol=user.rol,
+        empresa_id=str(user.empresa_id) if user.empresa_id else None,
+        activo=user.activo
+    )
+    
     return TokenResponse(
         access_token=access_token,
         refresh_token=refresh_token,
-        token_type="bearer"
+        token_type="bearer",
+        user=user_response
     )
 
 

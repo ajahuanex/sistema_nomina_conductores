@@ -30,22 +30,57 @@ DATABASE_URL = os.getenv(
 )
 
 
-async def create_superuser(session: AsyncSession):
-    """Crear usuario superusuario inicial"""
-    print("Creando usuario superusuario...")
+async def create_usuarios_sistema(session: AsyncSession):
+    """Crear usuarios del sistema para pruebas"""
+    print("Creando usuarios del sistema...")
     
-    superuser = Usuario(
-        email="admin@drtc.gob.pe",
-        password_hash=pwd_context.hash("Admin123!"),
-        nombres="Administrador",
-        apellidos="Sistema",
-        rol=RolUsuario.SUPERUSUARIO,
-        activo=True
-    )
+    usuarios = [
+        {
+            "email": "admin@drtc.gob.pe",
+            "password": "Admin123!",
+            "nombres": "Administrador",
+            "apellidos": "Sistema",
+            "rol": RolUsuario.SUPERUSUARIO,
+            "dni": "00000001"
+        },
+        {
+            "email": "director@drtc.gob.pe",
+            "password": "Director123!",
+            "nombres": "Juan Carlos",
+            "apellidos": "Pérez Mamani",
+            "rol": RolUsuario.DIRECTOR,
+            "dni": "12345678"
+        },
+        {
+            "email": "subdirector@drtc.gob.pe",
+            "password": "Subdirector123!",
+            "nombres": "María Elena",
+            "apellidos": "Quispe Condori",
+            "rol": RolUsuario.SUBDIRECTOR,
+            "dni": "23456789"
+        },
+        {
+            "email": "operario@drtc.gob.pe",
+            "password": "Operario123!",
+            "nombres": "Pedro Luis",
+            "apellidos": "Huanca Flores",
+            "rol": RolUsuario.OPERARIO,
+            "dni": "34567890"
+        }
+    ]
     
-    session.add(superuser)
+    for user_data in usuarios:
+        password = user_data.pop("password")
+        usuario = Usuario(
+            **user_data,
+            password_hash=pwd_context.hash(password),
+            activo=True
+        )
+        session.add(usuario)
+        print(f"  ✓ {usuario.rol.value}: {usuario.email}")
+    
     await session.commit()
-    print(f"✓ Superusuario creado: {superuser.email}")
+    print(f"✓ {len(usuarios)} usuarios del sistema creados")
 
 
 async def create_tipos_autorizacion(session: AsyncSession):
@@ -318,7 +353,7 @@ async def seed_database():
     async with async_session() as session:
         try:
             # Crear datos base
-            await create_superuser(session)
+            await create_usuarios_sistema(session)
             await create_tipos_autorizacion(session)
             await create_tipos_infraccion(session)
             await create_conceptos_tupa(session)
@@ -326,10 +361,20 @@ async def seed_database():
             print("\n" + "=" * 60)
             print("✓ BASE DE DATOS POBLADA EXITOSAMENTE")
             print("=" * 60)
-            print("\nCredenciales del superusuario:")
-            print("  Email: admin@drtc.gob.pe")
-            print("  Password: Admin123!")
-            print("\n⚠ IMPORTANTE: Cambie la contraseña después del primer login")
+            print("\nCredenciales de usuarios de prueba:")
+            print("\n  SUPERUSUARIO:")
+            print("    Email: admin@drtc.gob.pe")
+            print("    Password: Admin123!")
+            print("\n  DIRECTOR:")
+            print("    Email: director@drtc.gob.pe")
+            print("    Password: Director123!")
+            print("\n  SUBDIRECTOR:")
+            print("    Email: subdirector@drtc.gob.pe")
+            print("    Password: Subdirector123!")
+            print("\n  OPERARIO:")
+            print("    Email: operario@drtc.gob.pe")
+            print("    Password: Operario123!")
+            print("\n⚠ IMPORTANTE: Cambie las contraseñas después del primer login")
             print("=" * 60)
             
         except Exception as e:

@@ -61,11 +61,18 @@ class Usuario(BaseModel):
     # Nota: Esta es la empresa que el gerente gestiona
     empresa_id = Column(
         UUID(as_uuid=True),
+        ForeignKey("empresas.id", ondelete="SET NULL"),
         nullable=True,
         index=True
     )
     
     # Relaciones
+    empresa = relationship(
+        "Empresa",
+        foreign_keys=[empresa_id],
+        backref="gerente_usuario"
+    )
+    
     notificaciones = relationship(
         "Notificacion",
         back_populates="usuario",
@@ -106,3 +113,32 @@ class Usuario(BaseModel):
             RolUsuario.SUBDIRECTOR,
             RolUsuario.OPERARIO
         ]
+    
+    def tiene_permiso_modulo(self, modulo: str, accion: str = "leer") -> bool:
+        """
+        Verifica si el usuario tiene permiso para un módulo específico
+        
+        Args:
+            modulo: Nombre del módulo (usuarios, empresas, conductores, etc.)
+            accion: Tipo de acción (leer, crear, editar, eliminar)
+        
+        Returns:
+            bool: True si tiene permiso
+        """
+        # Superusuario siempre tiene todos los permisos
+        if self.rol == RolUsuario.SUPERUSUARIO:
+            return True
+        
+        # Buscar permiso específico del usuario
+        for permiso in self.permisos:
+            if permiso.modulo == modulo and permiso.activo:
+                if accion == "leer":
+                    return permiso.puede_leer
+                elif accion == "crear":
+                    return permiso.puede_crear
+                elif accion == "editar":
+                    return permiso.puede_editar
+                elif accion == "eliminar":
+                    return permiso.puede_eliminar
+        
+        return False

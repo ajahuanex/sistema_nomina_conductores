@@ -1,0 +1,298 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Detalle de Conductor - DRTC Puno">
+  <div class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Detalle del Conductor</h1>
+            <p class="text-sm text-gray-600" id="conductorSubtitle">Cargando...</p>
+          </div>
+          <div class="flex gap-3">
+            <a
+              href="/conductores"
+              class="px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              ← Volver
+            </a>
+            <a
+              id="editButton"
+              href="#"
+              class="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Editar
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Loading State -->
+      <div id="loadingState" class="bg-white rounded-lg shadow p-8 text-center">
+        <div class="animate-pulse">
+          <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
+          <div class="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
+        </div>
+        <p class="text-gray-500 mt-4">Cargando información del conductor...</p>
+      </div>
+
+      <!-- Error State -->
+      <div id="errorState" class="hidden bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg">
+        <p class="font-medium">Error al cargar el conductor</p>
+        <p class="text-sm mt-1" id="errorMessage"></p>
+      </div>
+
+      <!-- Content -->
+      <div id="contentState" class="hidden space-y-6">
+        <!-- Estado y Acciones -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div>
+                <p class="text-sm text-gray-600">Estado Actual</p>
+                <div id="estadoBadge" class="mt-1"></div>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button
+                id="btnHabilitar"
+                class="hidden px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
+              >
+                Habilitar
+              </button>
+              <button
+                id="btnObservar"
+                class="hidden px-4 py-2 bg-orange-600 text-white text-sm rounded-lg hover:bg-orange-700 transition-colors"
+              >
+                Observar
+              </button>
+              <button
+                id="btnSuspender"
+                class="hidden px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Suspender
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Datos Personales -->
+        <div class="bg-white rounded-lg shadow">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Datos Personales</h2>
+          </div>
+          <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <p class="text-sm text-gray-600">DNI</p>
+              <p class="text-base font-medium text-gray-900" id="dni">-</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Nombres Completos</p>
+              <p class="text-base font-medium text-gray-900" id="nombreCompleto">-</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Fecha de Nacimiento</p>
+              <p class="text-base font-medium text-gray-900" id="fechaNacimiento">-</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Email</p>
+              <p class="text-base font-medium text-gray-900" id="email">-</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Teléfono</p>
+              <p class="text-base font-medium text-gray-900" id="telefono">-</p>
+            </div>
+            <div class="md:col-span-2">
+              <p class="text-sm text-gray-600">Dirección</p>
+              <p class="text-base font-medium text-gray-900" id="direccion">-</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Licencia de Conducir -->
+        <div class="bg-white rounded-lg shadow">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Licencia de Conducir</h2>
+          </div>
+          <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <p class="text-sm text-gray-600">Número de Licencia</p>
+              <p class="text-base font-medium text-gray-900" id="licenciaNumero">-</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Categoría</p>
+              <p class="text-base font-medium text-gray-900" id="licenciaCategoria">-</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Fecha de Emisión</p>
+              <p class="text-base font-medium text-gray-900" id="licenciaEmision">-</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Fecha de Vencimiento</p>
+              <p class="text-base font-medium text-gray-900" id="licenciaVencimiento">-</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificado Médico -->
+        <div class="bg-white rounded-lg shadow">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Certificado Médico</h2>
+          </div>
+          <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <p class="text-sm text-gray-600">Número de Certificado</p>
+              <p class="text-base font-medium text-gray-900" id="certificadoNumero">-</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Fecha de Vencimiento</p>
+              <p class="text-base font-medium text-gray-900" id="certificadoVencimiento">-</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empresa -->
+        <div class="bg-white rounded-lg shadow">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Empresa</h2>
+          </div>
+          <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <p class="text-sm text-gray-600">Razón Social</p>
+              <p class="text-base font-medium text-gray-900" id="empresaRazon">-</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">RUC</p>
+              <p class="text-base font-medium text-gray-900" id="empresaRuc">-</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información del Sistema -->
+        <div class="bg-white rounded-lg shadow">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Información del Sistema</h2>
+          </div>
+          <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <p class="text-sm text-gray-600">Fecha de Registro</p>
+              <p class="text-base font-medium text-gray-900" id="fechaRegistro">-</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Última Actualización</p>
+              <p class="text-base font-medium text-gray-900" id="fechaActualizacion">-</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</MainLayout>
+
+<script>
+  import { conductoresService, type Conductor } from '../../services/conductores';
+
+  // Verificar autenticación
+  const token = localStorage.getItem('access_token');
+  if (!token) {
+    window.location.href = '/login';
+  }
+
+  // Obtener ID del conductor de la URL
+  const pathParts = window.location.pathname.split('/');
+  const conductorId = pathParts[pathParts.length - 1];
+
+  const loadingState = document.getElementById('loadingState')!;
+  const errorState = document.getElementById('errorState')!;
+  const contentState = document.getElementById('contentState')!;
+  const errorMessage = document.getElementById('errorMessage')!;
+
+  // Función para formatear fecha
+  function formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-PE', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  // Función para obtener badge de estado
+  function getEstadoBadge(estado: string): string {
+    const badges: Record<string, string> = {
+      'pendiente': '<span class="px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-800">Pendiente</span>',
+      'habilitado': '<span class="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">Habilitado</span>',
+      'observado': '<span class="px-3 py-1 text-sm font-semibold rounded-full bg-orange-100 text-orange-800">Observado</span>',
+      'suspendido': '<span class="px-3 py-1 text-sm font-semibold rounded-full bg-red-100 text-red-800">Suspendido</span>',
+      'revocado': '<span class="px-3 py-1 text-sm font-semibold rounded-full bg-gray-100 text-gray-800">Revocado</span>',
+    };
+    return badges[estado] || estado;
+  }
+
+  // Cargar datos del conductor
+  async function loadConductor() {
+    try {
+      const conductor = await conductoresService.getById(conductorId);
+
+      // Ocultar loading, mostrar contenido
+      loadingState.classList.add('hidden');
+      contentState.classList.remove('hidden');
+
+      // Actualizar título
+      document.getElementById('conductorSubtitle')!.textContent = 
+        `${conductor.nombres} ${conductor.apellidos} - DNI ${conductor.dni}`;
+
+      // Actualizar botón editar
+      document.getElementById('editButton')!.setAttribute('href', `/conductores/${conductorId}/editar`);
+
+      // Datos personales
+      document.getElementById('dni')!.textContent = conductor.dni;
+      document.getElementById('nombreCompleto')!.textContent = 
+        `${conductor.nombres} ${conductor.apellidos}`;
+      document.getElementById('fechaNacimiento')!.textContent = formatDate(conductor.fecha_nacimiento);
+      document.getElementById('email')!.textContent = conductor.email;
+      document.getElementById('telefono')!.textContent = conductor.telefono;
+      document.getElementById('direccion')!.textContent = conductor.direccion;
+
+      // Licencia
+      document.getElementById('licenciaNumero')!.textContent = conductor.licencia_numero;
+      document.getElementById('licenciaCategoria')!.textContent = conductor.licencia_categoria;
+      document.getElementById('licenciaEmision')!.textContent = formatDate(conductor.licencia_emision);
+      document.getElementById('licenciaVencimiento')!.textContent = formatDate(conductor.licencia_vencimiento);
+
+      // Certificado médico
+      document.getElementById('certificadoNumero')!.textContent = 
+        conductor.certificado_medico_numero || 'No registrado';
+      document.getElementById('certificadoVencimiento')!.textContent = 
+        conductor.certificado_medico_vencimiento ? formatDate(conductor.certificado_medico_vencimiento) : 'No registrado';
+
+      // Empresa
+      document.getElementById('empresaRazon')!.textContent = 
+        conductor.empresa?.razon_social || 'No disponible';
+      document.getElementById('empresaRuc')!.textContent = 
+        conductor.empresa?.ruc || 'No disponible';
+
+      // Estado
+      document.getElementById('estadoBadge')!.innerHTML = getEstadoBadge(conductor.estado);
+
+      // Fechas del sistema
+      document.getElementById('fechaRegistro')!.textContent = formatDate(conductor.created_at);
+      document.getElementById('fechaActualizacion')!.textContent = formatDate(conductor.updated_at);
+
+    } catch (error: any) {
+      console.error('Error loading conductor:', error);
+      loadingState.classList.add('hidden');
+      errorState.classList.remove('hidden');
+      errorMessage.textContent = error.message || 'No se pudo cargar la información del conductor';
+    }
+  }
+
+  // Cargar conductor al iniciar
+  loadConductor();
+</script>

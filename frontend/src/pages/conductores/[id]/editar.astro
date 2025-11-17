@@ -1,0 +1,398 @@
+---
+import MainLayout from '../../../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Editar Conductor - DRTC Puno">
+  <div class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Editar Conductor</h1>
+            <p class="text-sm text-gray-600" id="conductorSubtitle">Cargando...</p>
+          </div>
+          <a id="backButton" href="#" class="text-sm text-blue-600 hover:text-blue-700">
+            ← Volver al Detalle
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Loading State -->
+      <div id="loadingState" class="bg-white rounded-lg shadow p-8 text-center">
+        <div class="animate-pulse">
+          <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
+          <div class="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
+        </div>
+        <p class="text-gray-500 mt-4">Cargando datos del conductor...</p>
+      </div>
+
+      <!-- Mensajes -->
+      <div id="successMessage" class="hidden bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6">
+        <p class="font-medium">¡Conductor actualizado exitosamente!</p>
+        <p class="text-sm">Redirigiendo al detalle...</p>
+      </div>
+
+      <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+      </div>
+
+      <!-- Formulario -->
+      <form id="conductorForm" class="hidden bg-white rounded-lg shadow">
+        <!-- Datos Personales -->
+        <div class="p-6 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Datos Personales</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- DNI (readonly) -->
+            <div>
+              <label for="dni" class="block text-sm font-medium text-gray-700 mb-2">
+                DNI <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="dni"
+                name="dni"
+                readonly
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed"
+              />
+              <p class="text-xs text-gray-500 mt-1">El DNI no se puede modificar</p>
+            </div>
+
+            <!-- Nombres -->
+            <div>
+              <label for="nombres" class="block text-sm font-medium text-gray-700 mb-2">
+                Nombres <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="nombres"
+                name="nombres"
+                required
+                maxlength="100"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <!-- Apellidos -->
+            <div>
+              <label for="apellidos" class="block text-sm font-medium text-gray-700 mb-2">
+                Apellidos <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="apellidos"
+                name="apellidos"
+                required
+                maxlength="100"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <!-- Fecha de Nacimiento -->
+            <div>
+              <label for="fecha_nacimiento" class="block text-sm font-medium text-gray-700 mb-2">
+                Fecha de Nacimiento <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                id="fecha_nacimiento"
+                name="fecha_nacimiento"
+                required
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                Email <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                maxlength="255"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <!-- Teléfono -->
+            <div>
+              <label for="telefono" class="block text-sm font-medium text-gray-700 mb-2">
+                Teléfono <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="tel"
+                id="telefono"
+                name="telefono"
+                required
+                maxlength="20"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <!-- Dirección -->
+            <div class="md:col-span-2">
+              <label for="direccion" class="block text-sm font-medium text-gray-700 mb-2">
+                Dirección <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="direccion"
+                name="direccion"
+                required
+                maxlength="500"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Datos de Licencia -->
+        <div class="p-6 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Licencia de Conducir</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Número de Licencia (readonly) -->
+            <div>
+              <label for="licencia_numero" class="block text-sm font-medium text-gray-700 mb-2">
+                Número de Licencia <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="licencia_numero"
+                name="licencia_numero"
+                readonly
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed"
+              />
+              <p class="text-xs text-gray-500 mt-1">El número de licencia no se puede modificar</p>
+            </div>
+
+            <!-- Categoría -->
+            <div>
+              <label for="licencia_categoria" class="block text-sm font-medium text-gray-700 mb-2">
+                Categoría <span class="text-red-500">*</span>
+              </label>
+              <select
+                id="licencia_categoria"
+                name="licencia_categoria"
+                required
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Seleccione...</option>
+                <option value="A-I">A-I - Motocicletas</option>
+                <option value="A-IIa">A-IIa - Automóviles</option>
+                <option value="A-IIb">A-IIb - Taxis y remolques</option>
+                <option value="A-IIIa">A-IIIa - Camionetas y microbuses</option>
+                <option value="A-IIIb">A-IIIb - Ómnibus</option>
+                <option value="A-IIIc">A-IIIc - Vehículos pesados</option>
+              </select>
+            </div>
+
+            <!-- Fecha de Emisión -->
+            <div>
+              <label for="licencia_emision" class="block text-sm font-medium text-gray-700 mb-2">
+                Fecha de Emisión <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                id="licencia_emision"
+                name="licencia_emision"
+                required
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <!-- Fecha de Vencimiento -->
+            <div>
+              <label for="licencia_vencimiento" class="block text-sm font-medium text-gray-700 mb-2">
+                Fecha de Vencimiento <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                id="licencia_vencimiento"
+                name="licencia_vencimiento"
+                required
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificado Médico -->
+        <div class="p-6 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Certificado Médico (Opcional)</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Número de Certificado -->
+            <div>
+              <label for="certificado_medico_numero" class="block text-sm font-medium text-gray-700 mb-2">
+                Número de Certificado
+              </label>
+              <input
+                type="text"
+                id="certificado_medico_numero"
+                name="certificado_medico_numero"
+                maxlength="50"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <!-- Fecha de Vencimiento -->
+            <div>
+              <label for="certificado_medico_vencimiento" class="block text-sm font-medium text-gray-700 mb-2">
+                Fecha de Vencimiento
+              </label>
+              <input
+                type="date"
+                id="certificado_medico_vencimiento"
+                name="certificado_medico_vencimiento"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="p-6 bg-gray-50 flex justify-end gap-4">
+          <a
+            id="cancelButton"
+            href="#"
+            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Cancelar
+          </a>
+          <button
+            type="submit"
+            id="submitButton"
+            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Guardar Cambios
+          </button>
+        </div>
+      </form>
+    </main>
+  </div>
+</MainLayout>
+
+<script>
+  import { conductoresService } from '../../../services/conductores';
+
+  // Verificar autenticación
+  const token = localStorage.getItem('access_token');
+  if (!token) {
+    window.location.href = '/login';
+  }
+
+  // Obtener ID del conductor de la URL
+  const pathParts = window.location.pathname.split('/');
+  const conductorId = pathParts[pathParts.length - 2]; // penúltimo elemento
+
+  const loadingState = document.getElementById('loadingState')!;
+  const form = document.getElementById('conductorForm') as HTMLFormElement;
+  const submitButton = document.getElementById('submitButton') as HTMLButtonElement;
+  const errorMessage = document.getElementById('errorMessage') as HTMLDivElement;
+  const successMessage = document.getElementById('successMessage') as HTMLDivElement;
+
+  // Actualizar links
+  document.getElementById('backButton')!.setAttribute('href', `/conductores/${conductorId}`);
+  document.getElementById('cancelButton')!.setAttribute('href', `/conductores/${conductorId}`);
+
+  // Cargar datos del conductor
+  async function loadConductor() {
+    try {
+      const conductor = await conductoresService.getById(conductorId);
+
+      // Ocultar loading, mostrar formulario
+      loadingState.classList.add('hidden');
+      form.classList.remove('hidden');
+
+      // Actualizar subtítulo
+      document.getElementById('conductorSubtitle')!.textContent = 
+        `${conductor.nombres} ${conductor.apellidos} - DNI ${conductor.dni}`;
+
+      // Pre-llenar formulario
+      (document.getElementById('dni') as HTMLInputElement).value = conductor.dni;
+      (document.getElementById('nombres') as HTMLInputElement).value = conductor.nombres;
+      (document.getElementById('apellidos') as HTMLInputElement).value = conductor.apellidos;
+      (document.getElementById('fecha_nacimiento') as HTMLInputElement).value = conductor.fecha_nacimiento;
+      (document.getElementById('email') as HTMLInputElement).value = conductor.email;
+      (document.getElementById('telefono') as HTMLInputElement).value = conductor.telefono;
+      (document.getElementById('direccion') as HTMLInputElement).value = conductor.direccion;
+
+      (document.getElementById('licencia_numero') as HTMLInputElement).value = conductor.licencia_numero;
+      (document.getElementById('licencia_categoria') as HTMLSelectElement).value = conductor.licencia_categoria;
+      (document.getElementById('licencia_emision') as HTMLInputElement).value = conductor.licencia_emision;
+      (document.getElementById('licencia_vencimiento') as HTMLInputElement).value = conductor.licencia_vencimiento;
+
+      if (conductor.certificado_medico_numero) {
+        (document.getElementById('certificado_medico_numero') as HTMLInputElement).value = conductor.certificado_medico_numero;
+      }
+      if (conductor.certificado_medico_vencimiento) {
+        (document.getElementById('certificado_medico_vencimiento') as HTMLInputElement).value = conductor.certificado_medico_vencimiento;
+      }
+
+    } catch (error: any) {
+      console.error('Error loading conductor:', error);
+      loadingState.classList.add('hidden');
+      errorMessage.textContent = error.message || 'No se pudo cargar la información del conductor';
+      errorMessage.classList.remove('hidden');
+    }
+  }
+
+  // Manejar envío del formulario
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    submitButton.disabled = true;
+    submitButton.textContent = 'Guardando...';
+    errorMessage.classList.add('hidden');
+    successMessage.classList.add('hidden');
+
+    try {
+      const formData = new FormData(form);
+      
+      const updateData = {
+        nombres: formData.get('nombres') as string,
+        apellidos: formData.get('apellidos') as string,
+        fecha_nacimiento: formData.get('fecha_nacimiento') as string,
+        direccion: formData.get('direccion') as string,
+        telefono: formData.get('telefono') as string,
+        email: formData.get('email') as string,
+        licencia_categoria: formData.get('licencia_categoria') as string,
+        licencia_emision: formData.get('licencia_emision') as string,
+        licencia_vencimiento: formData.get('licencia_vencimiento') as string,
+      } as any;
+
+      // Agregar certificado médico si está presente
+      const certNumero = formData.get('certificado_medico_numero') as string;
+      const certVencimiento = formData.get('certificado_medico_vencimiento') as string;
+      
+      if (certNumero) {
+        updateData.certificado_medico_numero = certNumero;
+      }
+      if (certVencimiento) {
+        updateData.certificado_medico_vencimiento = certVencimiento;
+      }
+
+      await conductoresService.update(conductorId, updateData);
+
+      successMessage.classList.remove('hidden');
+      
+      setTimeout(() => {
+        window.location.href = `/conductores/${conductorId}`;
+      }, 2000);
+
+    } catch (error: any) {
+      console.error('Error updating conductor:', error);
+      errorMessage.textContent = error.message || 'Error al actualizar el conductor. Por favor, verifica los datos e intenta de nuevo.';
+      errorMessage.classList.remove('hidden');
+      submitButton.disabled = false;
+      submitButton.textContent = 'Guardar Cambios';
+    }
+  });
+
+  // Cargar conductor al iniciar
+  loadConductor();
+</script>

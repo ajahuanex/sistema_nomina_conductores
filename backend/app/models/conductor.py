@@ -145,6 +145,12 @@ class Conductor(BaseModel):
         cascade="all, delete-orphan"
     )
     
+    documentos = relationship(
+        "DocumentoConductor",
+        back_populates="conductor",
+        cascade="all, delete-orphan"
+    )
+    
     # Índices compuestos
     __table_args__ = (
         Index('idx_conductor_dni_estado', 'dni', 'estado'),

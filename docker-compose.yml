@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   # Base de datos PostgreSQL
   postgres:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     container_name: drtc-postgres
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-drtc_nomina}
@@ -25,7 +23,7 @@ services:
 
   # Redis para caché y colas
   redis:
-    image: redis:7-alpine
+    image: redis:7.4-alpine
     container_name: drtc-redis
     command: redis-server --appendonly yes
     volumes:
@@ -139,8 +137,8 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/ssl:/etc/nginx/ssl:ro
     ports:
-      - "9090:80"
-      - "9443:443"
+      - "80:80"
+      - "443:443"
     depends_on:
       - frontend
       - backend

@@ -260,7 +260,10 @@
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7_
 
 
-- [-] 7. Implementar módulo de gestión de conductores
+- [x] 7. Implementar módulo de gestión de conductores
+
+
+
 
 
 
@@ -301,7 +304,15 @@
     - Escribir tests de integración para endpoints de conductores
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9_
 
-  - [ ] 7.4 Implementar gestión de documentos de conductores
+  - [x] 7.4 Implementar gestión de documentos de conductores
+
+
+
+
+
+
+
+
     - Crear modelo DocumentoConductor para almacenar archivos adjuntos
     - Implementar endpoint POST /api/v1/conductores/{id}/documentos para subir archivos
     - Implementar validación de tipos de archivo (PDF, JPG, PNG)
@@ -310,14 +321,27 @@
     - Escribir tests para upload y download de documentos
     - _Requirements: 3.6, 3.7_
 
-- [ ] 8. Implementar módulo de habilitaciones
-  - [ ] 8.1 Crear schemas Pydantic para Habilitacion
+- [x] 8. Implementar módulo de habilitaciones
+
+
+
+
+
+
+
+
+
+  - [x] 8.1 Crear schemas Pydantic para Habilitacion
+
     - Crear HabilitacionBase, HabilitacionCreate, HabilitacionResponse
     - Crear schema para revisión (HabilitacionReview)
     - Crear schema para observaciones (HabilitacionObservacion)
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
-  - [ ] 8.2 Implementar servicio HabilitacionService
+
+  - [x] 8.2 Implementar servicio HabilitacionService
+
+
     - Crear método crear_solicitud que se ejecuta automáticamente al registrar conductor
     - Crear método obtener_solicitudes_pendientes
     - Crear método revisar_solicitud (cambiar a EN_REVISION)
@@ -329,7 +353,10 @@
     - Escribir tests unitarios para cada método del flujo
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 4.10_
 
-  - [ ] 8.3 Implementar generación de certificados de habilitación
+
+  - [x] 8.3 Implementar generación de certificados de habilitación
+
+
     - Instalar librería para generación de PDFs (reportlab o weasyprint)
     - Crear plantilla HTML/CSS para certificado de habilitación
     - Implementar método generar_certificado en HabilitacionService
@@ -338,7 +365,12 @@
     - Escribir tests para generación de certificados
     - _Requirements: 4.9_
 
-  - [ ] 8.4 Crear endpoints de habilitaciones
+  - [x] 8.4 Crear endpoints de habilitaciones
+
+
+
+
+
     - Implementar GET /api/v1/habilitaciones con filtros por estado
     - Implementar GET /api/v1/habilitaciones/pendientes (solo Operarios/Directores)
     - Implementar GET /api/v1/habilitaciones/{id}
@@ -349,15 +381,32 @@
     - Implementar POST /api/v1/habilitaciones/{id}/suspender
     - Escribir tests de integración para flujo completo de habilitación
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 4.10_
+-
 
-- [ ] 9. Implementar módulo de pagos TUPA
-  - [ ] 9.1 Crear schemas Pydantic para Pago y ConceptoTUPA
+- [x] 9. Implementar módulo de pagos TUPA
+
+
+
+
+
+  - [x] 9.1 Crear schemas Pydantic para Pago y ConceptoTUPA
+
+
     - Crear ConceptoTUPABase, ConceptoTUPACreate, ConceptoTUPAResponse
     - Crear PagoBase, PagoCreate, PagoResponse
     - Crear schema para orden de pago
     - _Requirements: 5.1, 5.2, 5.3_
 
-  - [ ] 9.2 Implementar servicio PagoService
+  - [x] 9.2 Implementar servicio PagoService
+
+
+
+
+
+
+
+
+
     - Crear método calcular_monto_tupa según tipo de trámite
     - Crear método generar_orden_pago con código único
     - Crear método registrar_pago con validación de monto
@@ -366,7 +415,9 @@
     - Escribir tests unitarios para PagoService
     - _Requirements: 5.2, 5.3, 5.4, 5.5, 5.6, 5.7_
 
-  - [ ] 9.3 Crear endpoints de pagos
+
+  - [x] 9.3 Crear endpoints de pagos
+
     - Implementar GET /api/v1/pagos con filtros
     - Implementar POST /api/v1/pagos para registrar pago
     - Implementar GET /api/v1/pagos/{id}
@@ -376,6 +427,9 @@
     - _Requirements: 5.2, 5.3, 5.4, 5.5, 5.6_
 
 - [ ] 10. Implementar módulo de infracciones
+
+
+
   - [ ] 10.1 Crear schemas Pydantic para Infraccion
     - Crear TipoInfraccionBase, TipoInfraccionCreate
     - Crear InfraccionBase, InfraccionCreate, InfraccionUpdate, InfraccionResponse

@@ -17,6 +17,29 @@ class HabilitacionRepository(BaseRepository[Habilitacion]):
     def __init__(self, db: AsyncSession):
         super().__init__(Habilitacion, db)
     
+    async def get_by_id_with_relations(self, id: UUID) -> Optional[Habilitacion]:
+        """
+        Obtener habilitación por ID con relaciones cargadas
+        
+        Args:
+            id: UUID de la habilitación
+            
+        Returns:
+            Habilitacion con relaciones o None si no existe
+        """
+        result = await self.db.execute(
+            select(Habilitacion)
+            .options(
+                selectinload(Habilitacion.conductor).selectinload(Conductor.empresa),
+                selectinload(Habilitacion.pago),
+                selectinload(Habilitacion.revisor),
+                selectinload(Habilitacion.aprobador),
+                selectinload(Habilitacion.habilitador)
+            )
+            .where(Habilitacion.id == id)
+        )
+        return result.scalar_one_or_none()
+    
     async def get_by_codigo(self, codigo_habilitacion: str) -> Optional[Habilitacion]:
         """
         Obtener habilitación por código

@@ -131,3 +131,151 @@ def get_optional_current_user(
         return get_current_user(credentials, db)
     except HTTPException:
         return None
+
+
+
+async def get_empresa_gerente(
+    current_user: Usuario = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Obtiene la empresa del gerente actual
+    Solo funciona si el usuario es gerente y tiene empresa asignada
+    
+    Args:
+        current_user: Usuario actual
+        db: Sesión de base de datos
+        
+    Returns:
+        Empresa del gerente
+        
+    Raises:
+        HTTPException: Si el usuario no es gerente o no tiene empresa asignada
+    """
+    from app.models.user import RolUsuario
+    from app.models.empresa import Empresa
+    
+    if current_user.rol != RolUsuario.GERENTE:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Solo los gerentes pueden acceder a esta funcionalidad"
+        )
+    
+    if not current_user.empresa_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El gerente no tiene una empresa asignada"
+        )
+    
+    # Obtener la empresa con sus relaciones
+    result = await db.execute(
+        select(Empresa).where(Empresa.id == current_user.empresa_id)
+    )
+    empresa = result.scalar_one_or_none()
+    
+    if not empresa:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Empresa no encontrada"
+        )
+    
+    if not empresa.activo:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="La empresa está inactiva"
+        )
+    
+    return empresa
+
+
+def require_admin_or_gerente_own_empresa(empresa_id: str):
+    """
+    Dependency factory que valida que el usuario sea admin o gerente de la empresa especificada
+    
+    Args:
+        empresa_id: ID de la empresa a validar
+        
+    Returns:
+        Dependency function
+    """
+    async def _validate(
+        current_user: Usuario = Depends(get_current_user)
+    ):
+        from app.models.user import RolUsuario
+        from uuid import UUID
+        
+        # Admins pueden acceder a cualquier empresa
+        if current_user.es_administrador():
+            return current_user
+        
+        # Gerentes solo pueden acceder a su propia empresa
+        if current_user.rol == RolUsuario.GERENTE:
+            if not current_user.empresa_id:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Gerente sin empresa asignada"
+                )
+            
+            try:
+                empresa_uuid = UUID(empresa_id)
+            except ValueError:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="ID de empresa inválido"
+                )
+            
+            if current_user.empresa_id != empresa_uuid:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="No tiene permisos para acceder a esta empresa"
+                )
+            
+            return current_user
+        
+        # Otros roles no tienen acceso
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="No tiene permisos para acceder a esta funcionalidad"
+        )
+    
+    return _validate
+
+
+
+def require_module_permission(modulo: str, accion: str = "leer"):
+    """
+    Dependency factory que verifica permisos de módulo
+    
+    Args:
+        modulo: Nombre del módulo (usuarios, empresas, conductores, etc.)
+        accion: Tipo de acción (leer, crear, editar, eliminar)
+        
+    Returns:
+        Dependency function
+        
+    Example:
+        @router.get("/usuarios")
+        async def listar_usuarios(
+            current_user: Usuario = Depends(require_module_permission("usuarios", "leer"))
+        ):
+            ...
+    """
+    async def _validate(
+        current_user: Usuario = Depends(get_current_user)
+    ):
+        from app.models.user import RolUsuario
+        
+        # Superusuario siempre tiene acceso
+        if current_user.rol == RolUsuario.SUPERUSUARIO:
+            return current_user
+        
+        # Verificar permiso específico
+        if not current_user.tiene_permiso_modulo(modulo, accion):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"No tiene permisos para {accion} en el módulo {modulo}"
+            )
+        
+        return current_user
+    
+    return _validate
